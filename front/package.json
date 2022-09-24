@@ -10,6 +10,8 @@
   "author": "graham",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@reduxjs/toolkit": "^1.8.5",
     "antd": "^4.23.2",
     "axios": "^0.27.2",
@@ -22,6 +24,8 @@
     "redux": "^4.2.0"
   },
   "devDependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@emotion/babel-plugin": "^11.10.2",
     "prop-types": "^15.8.1",
     "redux-logger": "^3.0.6"
   }
