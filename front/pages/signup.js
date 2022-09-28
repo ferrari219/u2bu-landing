@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Form, Input } from 'antd';
-import { UserAddOutlined } from '@ant-design/icons';
+import { Form, Button, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { SIGN_UP } from 'actions/user';
+import { UserAddOutlined } from '@ant-design/icons';
 
-const singup = () => {
+const signup = () => {
   const dispatch = useDispatch();
   const {
     handleSubmit,
@@ -51,7 +51,7 @@ const singup = () => {
             <span>관리자아이디는 admin만 가능합니다.</span>
           </dd>
           <dt>
-            <label htmlFor="userpassword">비밀번호</label>
+            <label htmlFor="password">비밀번호</label>
           </dt>
           <dd>
             <Controller
@@ -72,6 +72,9 @@ const singup = () => {
               )}
             />
           </dd>
+          <dt>
+            <label htmlFor="passwordCheck">비밀번호 한번더 입력</label>
+          </dt>
           <dd>
             <Controller
               name="passwordCheck"
@@ -96,7 +99,7 @@ const singup = () => {
             />
           </dd>
           <dt>
-            <label>이메일</label>
+            <label htmlFor="email">이메일</label>
           </dt>
           <dd>
             <Controller
@@ -135,4 +138,4 @@ const singup = () => {
   );
 };
 
-export default singup;
+export default signup;

@@ -1,8 +1,9 @@
-const express = require("express");
-const { User } = require("../models");
+const express = require('express');
+const { User } = require('../models');
 const router = express.Router();
 
-router.post("/signup", async (req, res, next) => {
+//회원가입
+router.post('/user', async (req, res, next) => {
   try {
     const user = await User.create({
       userid: req.body.userid,

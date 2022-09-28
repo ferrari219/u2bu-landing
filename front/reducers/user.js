@@ -13,7 +13,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
-  extraReducers: (builder) =>
+  extraReducers: (builder) => {
     builder
       .addCase(SIGN_UP.pending, (state) => {
         state.signUpLoading = true;
@@ -29,7 +29,8 @@ const userSlice = createSlice({
         state.signUpLoading = false;
         state.signUpError = action.payload;
       })
-      .addDefaultCase((state) => state),
+      .addDefaultCase((state) => state);
+  },
 });
 
 export default userSlice;
