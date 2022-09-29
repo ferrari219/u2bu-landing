@@ -1,10 +1,11 @@
-const express = require('express');
-const { User } = require('../models');
+const express = require("express");
+const { User } = require("../models");
 const router = express.Router();
 
 //회원가입
-router.post('/user', async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
   try {
+    console.log(req.body);
     const user = await User.create({
       userid: req.body.userid,
       password: req.body.password,
