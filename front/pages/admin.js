@@ -1,8 +1,10 @@
 import React from 'react';
-import { Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 const admin = () => {
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     register,
@@ -13,12 +15,14 @@ const admin = () => {
     defaultValues: {
       userid: 'admin',
       password: '1',
-      password: '1',
-      email: 'ferrari219@nate.com',
     },
   });
   return (
-    <Form>
+    <Form
+      onFinish={handleSubmit(() => {
+        dispatch();
+      })}
+    >
       <dl>
         <dt>
           <label htmlFor="userid">아이디</label>
@@ -36,9 +40,26 @@ const admin = () => {
           <label htmlFor="password">비밀번호</label>
         </dt>
         <dd>
-          <Controller />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type="password"
+                {...register('password', {
+                  required: '비밀번호를 입력하세요',
+                })}
+                {...field}
+              />
+            )}
+          />
         </dd>
       </dl>
+      <div>
+        <Button type="primary" htmlType="submit">
+          로그인
+        </Button>
+      </div>
     </Form>
   );
 };

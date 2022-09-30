@@ -9,8 +9,8 @@ dotenv.config();
 
 const db = require('./models');
 db.sequelize
-  // .sync()
-  .sync({ force: true })
+  .sync()
+  // .sync({ force: true })
   .then(() => {
     console.log('db 연결 성공');
   })
