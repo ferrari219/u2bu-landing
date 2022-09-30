@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { SIGN_UP } from "actions/user";
+import { createSlice } from '@reduxjs/toolkit';
+import { SIGN_UP } from 'actions/user';
 
 export const initialState = {
   me: null,
@@ -11,7 +11,7 @@ export const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -24,9 +24,6 @@ const userSlice = createSlice({
       .addCase(SIGN_UP.fulfilled, (state) => {
         state.signUpLoading = false;
         state.signUpDone = true;
-        //state.me = null;
-        // console.log(action.data);
-        // state.signUpData = action.payload;
       })
       .addCase(SIGN_UP.rejected, (state, action) => {
         state.signUpLoading = false;
