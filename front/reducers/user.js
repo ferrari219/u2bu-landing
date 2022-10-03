@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SIGN_UP } from 'actions/user';
+import { LOG_IN, SIGN_UP } from 'actions/user';
 
 export const initialState = {
   me: null,
   signUpData: null,
 
+  logInLoading: false,
+  logInDone: false,
+  logInError: null,
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
@@ -16,6 +19,19 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(LOG_IN.pending, (state) => {
+        state.logInLoading = true;
+        state.logInDone = false;
+        state.logInError = null;
+      })
+      .addCase(LOG_IN.fulfilled, (state) => {
+        state.logInLoading = false;
+        state.logInDone = true;
+      })
+      .addCase(LOG_IN.rejected, (state, action) => {
+        state.logInLoading = false;
+        state.logInError = action.payload;
+      })
       .addCase(SIGN_UP.pending, (state) => {
         state.signUpLoading = true;
         state.signUpDone = false;
