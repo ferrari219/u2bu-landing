@@ -8,7 +8,7 @@ module.exports = () => {
     new LocalStrategy(
       {
         usernameField: 'userid',
-        paswordField: 'password',
+        passwordField: 'password',
       },
       async (userid, password, done) => {
         try {

@@ -14,18 +14,18 @@ router.post('/login', (req, res, next) => {
     }
     if (info) return res.status(401).send(info.reason);
     return req.login(user, async (loginErr) => {
+      // console.log();
       if (loginErr) {
         console.error(loginErr);
         return next(loginErr);
       }
-      const fullUserPassword = await User.findOne({
-        where: { id: user.userid },
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
         attributes: {
           exclude: ['password'],
         },
-        include: [],
       });
-      return res.status(200).json(fullUserPassword);
+      return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
 });
