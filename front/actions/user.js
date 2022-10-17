@@ -3,13 +3,24 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { backURL } from 'config/config';
 
 axios.defaults.baseURL = backURL;
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 export const LOG_IN = createAsyncThunk(
   'user/login',
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post('/user/login', data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const LOG_OUT = createAsyncThunk(
+  'user/logout',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/user/logout', data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

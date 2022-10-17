@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LOG_IN, SIGN_UP } from 'actions/user';
+import { LOG_IN, LOG_OUT, SIGN_UP } from 'actions/user';
 
 export const initialState = {
   me: null,
@@ -8,6 +8,9 @@ export const initialState = {
   logInLoading: false,
   logInDone: false,
   logInError: null,
+  logOutLoading: false,
+  logOutDone: false,
+  logOutError: null,
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
@@ -19,19 +22,6 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(LOG_IN.pending, (state) => {
-        state.logInLoading = true;
-        state.logInDone = false;
-        state.logInError = null;
-      })
-      .addCase(LOG_IN.fulfilled, (state) => {
-        state.logInLoading = false;
-        state.logInDone = true;
-      })
-      .addCase(LOG_IN.rejected, (state, action) => {
-        state.logInLoading = false;
-        state.logInError = action.payload;
-      })
       .addCase(SIGN_UP.pending, (state) => {
         state.signUpLoading = true;
         state.signUpDone = false;
@@ -44,6 +34,34 @@ const userSlice = createSlice({
       .addCase(SIGN_UP.rejected, (state, action) => {
         state.signUpLoading = false;
         state.signUpError = action.payload;
+      })
+      .addCase(LOG_IN.pending, (state) => {
+        state.logInLoading = true;
+        state.logInDone = false;
+        state.logInError = null;
+      })
+      .addCase(LOG_IN.fulfilled, (state, action) => {
+        state.logInLoading = false;
+        state.logInDone = true;
+        state.me = action.payload;
+      })
+      .addCase(LOG_IN.rejected, (state, action) => {
+        state.logInLoading = false;
+        state.logInError = action.payload;
+      })
+      .addCase(LOG_OUT.pending, (state) => {
+        state.logOutLoading = true;
+        state.logOutDone = false;
+        state.logOutError = null;
+      })
+      .addCase(LOG_OUT.fulfilled, (state, action) => {
+        state.logOutLoading = false;
+        state.logOutDone = true;
+        state.me = action.payload;
+      })
+      .addCase(LOG_OUT.rejected, (state, action) => {
+        state.logOutLoading = false;
+        state.logOutError = action.payload;
       })
       .addDefaultCase((state) => state);
   },
