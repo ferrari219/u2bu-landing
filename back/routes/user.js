@@ -30,6 +30,14 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+//로그아웃
+router.post('/logout', (req, res) => {
+  req.logout();
+  res.clearCookie('connect.sid', { path: '/' });
+  req.session.destroy();
+  res.status(200).json('로그아웃이 완료되었습니다.');
+});
+
 //회원가입
 router.post('/signup', async (req, res, next) => {
   try {
