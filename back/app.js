@@ -7,14 +7,15 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const userRouter = require('../back/routes/user');
+const postRouter = require('../back/routes/post');
 const port = 3065;
 dotenv.config();
 
 const db = require('./models');
 const passportConfig = require('./passport');
 db.sequelize
-  .sync()
-  // .sync({ force: true })
+  // .sync()
+  .sync({ force: true })
   .then(() => {
     console.log('db 연결 성공');
   })
@@ -41,6 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/user', userRouter);
+app.use('/post', postRouter);
 
 app.listen(port, () => {
   console.log(`${port} 실행중`);
