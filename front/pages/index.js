@@ -1,29 +1,30 @@
 import React, { useCallback } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
-import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+
 import { ADD_POST } from 'actions/post';
 
 const index = () => {
   const dispatch = useDispatch();
   const {
-    register,
-    control,
-    getValues,
     handleSubmit,
+    register,
+    getValues,
+    control,
     formState: { errors },
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      applyName: '문쑨원',
-      birth: '19830202',
-      phone: '01028381341',
+      applyName: '홍길동',
+      birth: '1983-02-02',
+      phone: '010-2838-1341',
       address: '서울',
-      content: '기이이이인 내용',
+      content: 'test',
     },
   });
 
-  const onsubmit = useCallback((applyName, birth, phone, address, content) => {
+  const onSubmit = useCallback((applyName, birth, phone, address, content) => {
     // console.log(applyName, birth, phone, address, content);
     // dispatch(ADD_POST({ applyName, birth, phone, address, content }));
     const formData = new FormData();
@@ -44,9 +45,8 @@ const index = () => {
       <section>
         <Form
           onFinish={handleSubmit(
-            ({ applyName, birth, phone, address, content }) => {
-              onsubmit(applyName, birth, phone, address, content);
-            }
+            ({ applyName, birth, phone, address, content }) =>
+              onSubmit(applyName, birth, phone, address, content)
           )}
         >
           <dl>
@@ -56,11 +56,12 @@ const index = () => {
             <dd>
               <Controller
                 name="applyName"
+                placeholder="이름"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...register('applyName', {
-                      required: '필수입력입니다',
+                      required: '필수입력입니다.',
                     })}
                     {...field}
                   />
@@ -81,11 +82,12 @@ const index = () => {
               />
             </dd>
             <dt>
-              <label htmlFor="phone">휴대폰</label>
+              <label htmlFor="phone">연락처</label>
             </dt>
             <dd>
               <Controller
                 name="phone"
+                placeholder="01000000000"
                 control={control}
                 render={({ field }) => (
                   <Input
