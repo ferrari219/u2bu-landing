@@ -24,6 +24,11 @@ const index = () => {
     },
   });
 
+  const imageInput = useRef();
+  const onClickImageUpload = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
+
   const onSubmit = useCallback((applyName, birth, phone, address, content) => {
     console.log(applyName, birth, phone, address, content);
     dispatch(ADD_POST({ applyName, birth, phone, address, content }));

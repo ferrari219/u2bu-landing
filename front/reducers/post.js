@@ -41,6 +41,7 @@ const postSlice = createSlice({
       .addCase(UPLOAD_IMAGES.fulfilled, (state, action) => {
         state.uploadImagesLoading = true;
         state.uploadImagesDone = false;
+        state.imagePaths = state.imagePaths.concat(action.payload);
       })
       .addCase(UPLOAD_IMAGES.rejected, (state, action) => {
         state.uploadImagesLoading = true;
