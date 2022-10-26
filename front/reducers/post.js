@@ -5,7 +5,12 @@ export const initialState = {
   addPostLoading: false, //이벤트 응모하기
   addPostDone: false,
   addPostError: null,
+  uploadImagesLoading: false,
+  uploadImagesDone: false,
+  uploadImagesError: null,
+
   mainPosts: [],
+  imagePaths: [],
 };
 
 const postSlice = createSlice({
@@ -27,6 +32,19 @@ const postSlice = createSlice({
       .addCase(ADD_POST.rejected, (state, action) => {
         state.addPostLoading = false;
         state.addPostError = action.payload;
+      })
+      .addCase(UPLOAD_IMAGES.pending, (state) => {
+        state.uploadImagesLoading = true;
+        state.uploadImagesDone = false;
+        state.uploadImagesError = null;
+      })
+      .addCase(UPLOAD_IMAGES.fulfilled, (state, action) => {
+        state.uploadImagesLoading = true;
+        state.uploadImagesDone = false;
+      })
+      .addCase(UPLOAD_IMAGES.rejected, (state, action) => {
+        state.uploadImagesLoading = true;
+        state.uploadImagesError = action.payload;
       })
       .addDefaultCase((state) => state),
 });

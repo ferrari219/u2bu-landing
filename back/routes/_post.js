@@ -1,308 +1,125 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm, Controller } from 'react-hook-form';
+const express = require('express');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+const path = require('path');
+const fs = require('fs');
 
-import { backURL } from 'config/config';
-import UseInput from 'hook/UseInput';
-import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
-import Terms from 'components/front/NaverExpert/common/Terms';
-import { useMobile } from 'hook/useIsMobile';
-import theme from 'assets/styles/theme';
-import postSlice from 'reducers/post';
+const { Post, Image } = require('../models');
+const { isNotLoggedIn } = require('./middleware');
+const router = express.Router();
 
-const PostForm = () => {
-  const isMobile = useMobile(false);
-  const dispatch = useDispatch();
-  const {
-    handleSubmit,
-    register,
-    getValues,
-    control,
-    formState: { errors },
-  } = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      applyName: '홍길동',
-      birth: '1983-02-02',
-      phone: '010-2838-1341',
-      address: '서울',
-      content: 'test',
+//uploads 폴더 체크
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('uploads 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+//Image
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: 'ap-northeast-2',
+});
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'landing-s3-j',
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
     },
-  });
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, done) {
+//       done(null, 'uploads');
+//     },
+//     filename(req, file, done) {
+//       const ext = path.extname(file.originalname);
+//       const basename = path.basename(file.originalname, ext);
+//       done(null, basename + '_' + new Date().getTime() + ext);
+//     },
+//   }),
+//   limits: { fileSize: 20 * 1024 * 1024 },
+// });
 
-  const { imagePaths, addPostDone, addPostError } = useSelector(
-    (state) => state.post
-  );
+//Apply Promotion
+router.post('/', upload.none(), async (req, res, next) => {
+  try {
+    //정보재가공
+    const iYear = 40;
+    let birth = req.body.birth.replace(/[-.]/g, '');
+    if (birth.length < 8) {
+      if (parseInt(birth.substring(0, 2), 10) < iYear) {
+        //2000
+        birth = '20'.concat(birth);
+      } else {
+        birth = '19'.concat(birth);
+      }
+    }
+    const phone = req.body.phone
+      .replace(/[-.]/g, '')
+      .replace(/(8210|82010)/g, '010');
 
-  const imageInput = useRef();
-  const onClickImageUpload = useCallback(() => {
-    imageInput.current.click();
-  }, [imageInput.current]);
-
-  const onChangeImages = useCallback((e) => {
-    console.log('images', e.target.files);
-    const imageFormData = new FormData();
-    [].forEach.call(e.target.files, (image) => {
-      imageFormData.append('image', image);
-      console.log(imageFormData);
+    //중복응모자 찾기
+    const exPhone = await Post.findOne({
+      where: {
+        phone: phone,
+      },
     });
-    dispatch(UPLOAD_IMAGES(imageFormData));
-  }, []);
-  const onRemoveImage = useCallback(
-    (index) => () => {
-      dispatch(postSlice.actions.REMOVE_IMAGE(index));
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (addPostDone) {
-      message.warn('이벤트가 응모 되었습니다.');
+    if (exPhone) {
+      return res.status(400).json('중복 응모할 수 없습니다.');
     }
-  }, [addPostDone]);
-  useEffect(() => {
-    if (addPostError) {
-      message.warn(addPostError);
-    }
-  }, [addPostError]);
 
-  const onSubmit = useCallback((applyName, birth, phone, address, content) => {
-    const formData = new FormData();
-    imagePaths.forEach((image) => {
-      formData.append('image', image);
+    const post = await Post.create({
+      key: phone,
+      applyName: req.body.applyName,
+      birth: birth,
+      phone: phone,
+      address: req.body.address,
+      content: req.body.content,
+      test: req.body.test,
     });
-    formData.append('key', phone);
-    formData.append('applyName', applyName);
-    formData.append('birth', birth);
-    formData.append('phone', phone);
-    formData.append('address', address);
-    formData.append('content', content);
-    // formData.append('test', ''); //temp
-
-    return dispatch(ADD_POST(formData));
-  });
-
-  const markUp = (
-    <div className="container">
-      <Form
-        onFinish={handleSubmit(
-          ({ applyName, birth, phone, address, content, image }) =>
-            onSubmit(applyName, birth, phone, address, content, image)
-        )}
-      >
-        <div className="row">
-          <label htmlFor="applyName">이름</label>
-          <Controller
-            name="applyName"
-            placeholder="이름"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...register('applyName', {
-                  required: '필수입력입니다.',
-                })}
-                {...field}
-              />
-            )}
-          />
-        </div>
-        {errors.applyName && <div>{errors.applyName?.message}</div>}
-        <div className="row">
-          <label htmlFor="birth">생년월일</label>
-          <Controller
-            name="birth"
-            placeholder="YYYYMMDD"
-            control={control}
-            render={({ field }) => <Input {...register('birth')} {...field} />}
-          />
-        </div>
-        {errors.birth && <div>{errors.birth?.message}</div>}
-        <div className="row">
-          <label htmlFor="phone">연락처</label>
-          <Controller
-            name="phone"
-            placeholder="01000000000"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...register('phone', {
-                  required: '필수입력입니다.',
-                })}
-                {...field}
-              />
-            )}
-          />
-        </div>
-        {errors.phone && <div>{errors.phone?.message}</div>}
-        <div className="row">
-          <label htmlFor="address">주소</label>
-          <Controller
-            name="address"
-            placeholder="주소"
-            control={control}
-            render={({ field }) => (
-              <Input {...register('address')} {...field} />
-            )}
-          />
-        </div>
-        <div className="row">
-          <Controller
-            name="content"
-            placeholder="응모할 내용을 적어주세요."
-            control={control}
-            render={({ field }) => (
-              <Input.TextArea {...register('content')} {...field} />
-            )}
-          />
-        </div>
-        <div className="row btnWrap">
-          <label htmlFor="pic">이미지첨부</label>
-          <input
-            type="file"
-            name="image"
-            multiple
-            hidden
-            ref={imageInput}
-            onChange={onChangeImages}
-          />
-          <Button type="ghost" className="btnImg" onClick={onClickImageUpload}>
-            이미지업로드
-          </Button>
-        </div>
-        <div className="imgPreview">
-          {imagePaths &&
-            imagePaths.map((v, i) => (
-              <div key={v}>
-                {/* <img src={`${backURL}/${v}`} alt={v} /> */}
-                <img src={`${v.replace(/\/thumb\//, '/original/')}`} alt={v} />
-                <div>
-                  <Button onClick={onRemoveImage(i)}>제거</Button>
-                </div>
-              </div>
-            ))}
-        </div>
-        <div className="chk">
-          <Controller
-            name="terms"
-            control={control}
-            render={({ field }) => (
-              <Checkbox
-                checked={field.value}
-                {...register('terms', {
-                  required: '동의해야 응모 가능합니다.',
-                })}
-                {...field}
-              >
-                개인정보 수집 동의(필수)
-              </Checkbox>
-            )}
-          />
-          {errors.terms && <div>{errors.terms?.message}</div>}
-        </div>
-        <div className="term">
-          <Terms company="OO" />
-        </div>
-        <div className="row btnWrap">
-          <Button type="primary" size="large" shape="round" htmlType="submit">
-            응모하기
-          </Button>
-        </div>
-      </Form>
-    </div>
-  );
-  return (
-    <>
-      {isMobile ? (
-        <section css={PostFormMoStyle}>{markUp}</section>
-      ) : (
-        <section css={PostFormStyle}>{markUp}</section>
-      )}
-    </>
-  );
-};
-
-const PostFormStyle = css`
-  padding: ${theme.pc.padding.section};
-  & > .container {
-    max-width: ${theme.pc.maxwidth};
-    margin: 0 auto;
-    padding: 0 20rem;
-    .row {
-      display: flex;
-      flex-direction: row;
-      // justify-content: center;
-      align-items: center;
-      margin: 1rem 0;
-    }
-    .chk {
-      padding: 1rem 0;
-    }
-    label {
-      flex-basis: 20rem;
-      font-size: ${theme.pc.size.base};
-    }
-    input {
-      border: 1px solid #ccc;
-    }
-    .btnImg {
-      width: 100%;
-      background-color: ${theme.color.light.bg};
-    }
-    .term {
-      padding: 2rem;
-      border: 1px solid #ccc;
-      & > div {
-        white-space: pre-line;
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        //이미지 복수면 image: [test1.png, test2.png]
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images); //db에 post.images로 들어감
+      } else {
+        //이미지 단수면 image:
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
       }
     }
-    .btnWrap {
-      button {
-        margin: 0 auto;
-        padding-left: 5rem;
-        padding-right: 5rem;
-      }
-    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: Image,
+        },
+      ],
+    });
+    res.status(201).json(fullPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
-`;
-const PostFormMoStyle = css`
-  // background-color: ${theme.color.light.bg};
-  & > .container {
-    padding: ${theme.mo.padding.width};
-    .row {
-      padding: 2vw 0;
-      label {
-        display: none;
-        font-size: ${theme.mo.size.base};
-      }
-    }
-    .imgPreview {
-      img {
-        max-width: 100%;
-      }
-    }
-    .chk {
-      padding: 3vw 0;
-    }
-    .term {
-      padding: 3vw;
-      border: 1px solid #ccc;
-      & > div {
-        white-space: pre-line;
-      }
-    }
-    .btnImg {
-      width: 100%;
-      background-color: ${theme.color.light.bg};
-    }
-    .btnWrap {
-      button {
-        width: 100%;
-      }
-    }
-  }
-`;
+  //   res.send('/post');
+});
 
-export default PostForm;
+router.post('/images', upload.array('image'), (req, res, next) => {
+  console.log(req.files);
+  // res.json(req.files.map((v) => v.filename));
+  res.json(
+    // req.files.map((v) => v.location)
+    req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')) //lambda thumb
+  ); //s3
+});
+
+module.exports = router;

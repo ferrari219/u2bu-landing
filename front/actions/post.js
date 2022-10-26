@@ -16,3 +16,16 @@ export const ADD_POST = createAsyncThunk(
     }
   }
 );
+
+//업로드 이미지
+export const UPLOAD_IMAGES = createAsyncThunk(
+  'post/images',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/post/images', data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

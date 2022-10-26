@@ -17,26 +17,26 @@ const index = () => {
     mode: 'onChange',
     defaultValues: {
       applyName: '홍길동',
-      birth: '1983-02-02',
-      phone: '010-2838-1341',
+      birth: '2019-01-01',
+      phone: '010-1234-5678',
       address: '서울',
       content: 'test',
     },
   });
 
   const onSubmit = useCallback((applyName, birth, phone, address, content) => {
-    // console.log(applyName, birth, phone, address, content);
-    // dispatch(ADD_POST({ applyName, birth, phone, address, content }));
-    const formData = new FormData();
+    console.log(applyName, birth, phone, address, content);
+    dispatch(ADD_POST({ applyName, birth, phone, address, content }));
+    // const formData = new FormData();
 
-    formData.append('applyName', applyName);
-    formData.append('birth', birth);
-    formData.append('phone', phone);
-    formData.append('address', address);
-    formData.append('content', content);
+    // formData.append('applyName', applyName);
+    // formData.append('birth', birth);
+    // formData.append('phone', phone);
+    // formData.append('address', address);
+    // formData.append('content', content);
 
-    console.log(formData);
-    return dispatch(ADD_POST(formData));
+    // console.log(formData);
+    // return dispatch(ADD_POST(formData));
   }, []);
   return (
     <>

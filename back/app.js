@@ -28,8 +28,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+//front에서 데이터 받아올때
+app.use(express.json()); //axios 데이터 보낼때
+app.use(express.urlencoded({ extended: true })); //일반폼(멀티파트 제외)
+
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({

@@ -38,5 +38,7 @@ module.exports = class Post extends Model {
       }
     );
   }
-  static associate(db) {}
+  static associate(db) {
+    db.Post.hasMany(db.Image);
+  }
 };
