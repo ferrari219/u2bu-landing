@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ADD_POST } from 'actions/post';
+import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
 
 export const initialState = {
   addPostLoading: false, //이벤트 응모하기
