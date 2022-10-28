@@ -1,12 +1,14 @@
 import React, { useCallback, useRef } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 
-import { ADD_POST } from 'actions/post';
+import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
+import { backURL } from 'config/config';
 
 const index = () => {
   const dispatch = useDispatch();
+  const { imagePaths } = useSelector((state) => state.post);
   const {
     handleSubmit,
     register,
@@ -25,23 +27,31 @@ const index = () => {
   });
 
   const imageInput = useRef();
+  const onChangeImages = useCallback((e) => {
+    console.log('images', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+    dispatch(UPLOAD_IMAGES(imageFormData));
+  }, []);
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
 
   const onSubmit = useCallback((applyName, birth, phone, address, content) => {
-    console.log(applyName, birth, phone, address, content);
-    dispatch(ADD_POST({ applyName, birth, phone, address, content }));
-    // const formData = new FormData();
+    // console.log(applyName, birth, phone, address, content);
+    // dispatch(ADD_POST({ applyName, birth, phone, address, content }));
+    const formData = new FormData();
 
-    // formData.append('applyName', applyName);
-    // formData.append('birth', birth);
-    // formData.append('phone', phone);
-    // formData.append('address', address);
-    // formData.append('content', content);
+    formData.append('applyName', applyName);
+    formData.append('birth', birth);
+    formData.append('phone', phone);
+    formData.append('address', address);
+    formData.append('content', content);
 
-    // console.log(formData);
-    // return dispatch(ADD_POST(formData));
+    console.log(formData);
+    return dispatch(ADD_POST(formData));
   }, []);
   return (
     <>
@@ -131,7 +141,27 @@ const index = () => {
               <label htmlFor="pic">이미지첨부</label>
             </dt>
             <dd>
-              <input type="file" name="pic" multiple hidden />
+              <div>
+                <input
+                  type="file"
+                  name="pic"
+                  ref={imageInput}
+                  onChange={onChangeImages}
+                  multiple
+                  hidden
+                />
+                <Button onClick={onClickImageUpload}>업로드</Button>
+              </div>
+              <div>
+                {imagePaths.map((v, i) => (
+                  <div key={v}>
+                    <img src={`${backURL}/${v}`} alt={v} />
+                    <div>
+                      <Button>제거</Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </dd>
           </dl>
           <div>

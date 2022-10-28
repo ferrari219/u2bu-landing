@@ -6,6 +6,8 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
+const path = require('path');
+
 const userRouter = require('../back/routes/user');
 const postRouter = require('../back/routes/post');
 const port = 3065;
@@ -29,6 +31,8 @@ app.use(
   })
 );
 
+//multer
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 //front에서 데이터 받아올때
 app.use(express.json()); //axios 데이터 보낼때
 app.use(express.urlencoded({ extended: true })); //일반폼(멀티파트 제외)
