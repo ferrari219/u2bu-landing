@@ -5,10 +5,18 @@ import { useSelector } from 'react-redux';
 
 const admin = () => {
   const { me } = useSelector((state) => state.user);
+  const { mainPosts } = useSelector((state) => state.post);
   return (
     <AdminLayout>
       <h1>Admin</h1>
-      {me ? (
+      <>
+        <h2>로그인상태</h2>
+        <Row>
+          <div>로그인 후 내용</div>
+          {mainPosts}
+        </Row>
+      </>
+      {/* {me ? (
         <>
           <h2>로그인상태</h2>
           <Row>
@@ -22,7 +30,7 @@ const admin = () => {
             <div>로그아웃 내용</div>
           </Row>
         </>
-      )}
+      )} */}
     </AdminLayout>
   );
 };
