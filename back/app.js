@@ -48,8 +48,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/user', userRouter);
 app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 app.listen(port, () => {
   console.log(`${port} 실행중`);

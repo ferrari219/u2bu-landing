@@ -20,6 +20,7 @@ db.Post = post;
 db.Image = image;
 
 Object.keys(db).forEach((modelName) => {
+  // console.log(modelName);
   db[modelName].init(sequelize);
 });
 Object.keys(db).forEach((modelName) => {

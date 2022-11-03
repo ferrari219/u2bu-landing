@@ -138,13 +138,13 @@ const index = () => {
               />
             </dd>
             <dt>
-              <label htmlFor="pic">이미지첨부</label>
+              <label htmlFor="image">이미지첨부</label>
             </dt>
             <dd>
               <div>
                 <input
                   type="file"
-                  name="pic"
+                  name="image" // /back/routes/post.js upload.array('image') 와 일치해야함
                   ref={imageInput}
                   onChange={onChangeImages}
                   multiple
