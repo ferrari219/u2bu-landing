@@ -27,30 +27,33 @@ const index = () => {
   });
 
   const imageInput = useRef();
-  const onChangeImages = useCallback((e) => {
-    console.log('images', e.target.files);
-    const imageFormData = new FormData();
-    [].forEach.call(e.target.files, (f) => {
-      imageFormData.append('image', f);
-    });
-    dispatch(UPLOAD_IMAGES(imageFormData));
-  }, []);
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+
+  const onChangeImages = useCallback((e) => {
+    console.log('images', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (image) => {
+      imageFormData.append('image', image);
+      console.log(imageFormData);
+    });
+    dispatch(UPLOAD_IMAGES(imageFormData));
+  }, []);
 
   const onSubmit = useCallback((applyName, birth, phone, address, content) => {
     // console.log(applyName, birth, phone, address, content);
     // dispatch(ADD_POST({ applyName, birth, phone, address, content }));
     const formData = new FormData();
-
+    imagePaths.forEach((image) => {
+      formData.append('image', image);
+    });
     formData.append('applyName', applyName);
     formData.append('birth', birth);
     formData.append('phone', phone);
     formData.append('address', address);
     formData.append('content', content);
 
-    console.log(formData);
     return dispatch(ADD_POST(formData));
   }, []);
   return (
@@ -60,8 +63,8 @@ const index = () => {
       <section>
         <Form
           onFinish={handleSubmit(
-            ({ applyName, birth, phone, address, content }) =>
-              onSubmit(applyName, birth, phone, address, content)
+            ({ applyName, birth, phone, address, content, image }) =>
+              onSubmit(applyName, birth, phone, address, content, image)
           )}
         >
           <dl>

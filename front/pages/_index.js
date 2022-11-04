@@ -16,6 +16,9 @@ import postSlice from 'reducers/post';
 const PostForm = () => {
   const isMobile = useMobile(false);
   const dispatch = useDispatch();
+  const { imagePaths, addPostDone, addPostError } = useSelector(
+    (state) => state.post
+  );
   const {
     handleSubmit,
     register,
@@ -26,12 +29,44 @@ const PostForm = () => {
     mode: 'onChange',
     defaultValues: {
       applyName: '홍길동',
-      birth: '1983-02-02',
-      phone: '010-2838-1341',
+      birth: '2019-01-01',
+      phone: '010-1234-5678',
       address: '서울',
       content: 'test',
     },
   });
+
+  const imageInput = useRef();
+  const onClickImageUpload = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
+
+  const onChangeImages = useCallback((e) => {
+    console.log('images', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (image) => {
+      imageFormData.append('image', image);
+      console.log(imageFormData);
+    });
+    dispatch(UPLOAD_IMAGES(imageFormData));
+  }, []);
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch(postSlice.actions.REMOVE_IMAGE(index));
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (addPostDone) {
+      message.warn('이벤트가 응모 되었습니다.');
+    }
+  }, [addPostDone]);
+  useEffect(() => {
+    if (addPostError) {
+      message.warn(addPostError);
+    }
+  }, [addPostError]);
 
   const onSubmit = useCallback((applyName, birth, phone, address, content) => {
     const formData = new FormData();
@@ -115,7 +150,7 @@ const PostForm = () => {
         <div className="row">
           <Controller
             name="content"
-            placeholder="응모할 내용을 적어주세요."
+            placeholder="응모할 내용을 적어주세요"
             control={control}
             render={({ field }) => (
               <Input.TextArea {...register('content')} {...field} />
@@ -127,10 +162,10 @@ const PostForm = () => {
           <input
             type="file"
             name="image"
-            multiple
-            hidden
             ref={imageInput}
             onChange={onChangeImages}
+            multiple
+            hidden
           />
           <Button type="ghost" className="btnImg" onClick={onClickImageUpload}>
             이미지업로드
@@ -140,8 +175,8 @@ const PostForm = () => {
           {imagePaths &&
             imagePaths.map((v, i) => (
               <div key={v}>
-                {/* <img src={`${backURL}/${v}`} alt={v} /> */}
-                <img src={`${v.replace(/\/thumb\//, '/original/')}`} alt={v} />
+                <img src={`${backURL}/${v}`} alt={v} />
+                {/* <img src={`${v.replace(/\/thumb\//, '/original/')}`} alt={v} /> */}
                 <div>
                   <Button onClick={onRemoveImage(i)}>제거</Button>
                 </div>
