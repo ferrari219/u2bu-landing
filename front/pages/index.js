@@ -32,30 +32,31 @@ const index = () => {
   }, [imageInput.current]);
 
   const onChangeImages = useCallback((e) => {
-    console.log('images', e.target.files);
+    console.log('images:', e.target.files);
     const imageFormData = new FormData();
     [].forEach.call(e.target.files, (image) => {
       imageFormData.append('image', image);
-      console.log(imageFormData);
+      console.log('imageFormData:', imageFormData);
     });
     dispatch(UPLOAD_IMAGES(imageFormData));
   }, []);
 
-  const onSubmit = useCallback((applyName, birth, phone, address, content) => {
-    // console.log(applyName, birth, phone, address, content);
-    // dispatch(ADD_POST({ applyName, birth, phone, address, content }));
-    const formData = new FormData();
-    imagePaths.forEach((image) => {
-      formData.append('image', image);
-    });
-    formData.append('applyName', applyName);
-    formData.append('birth', birth);
-    formData.append('phone', phone);
-    formData.append('address', address);
-    formData.append('content', content);
+  const onSubmit = useCallback(
+    (applyName, birth, phone, address, content) => {
+      const formData = new FormData();
+      imagePaths.forEach((image) => {
+        formData.append('image', image);
+      });
+      formData.append('applyName', applyName);
+      formData.append('birth', birth);
+      formData.append('phone', phone);
+      formData.append('address', address);
+      formData.append('content', content);
 
-    return dispatch(ADD_POST(formData));
-  }, []);
+      return dispatch(ADD_POST(formData));
+    },
+    [imagePaths]
+  );
   return (
     <>
       <h1>ApplyForm</h1>
