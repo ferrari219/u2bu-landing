@@ -10,6 +10,7 @@ const path = require('path');
 
 const userRouter = require('../back/routes/user');
 const postRouter = require('../back/routes/post');
+const postsRouter = require('../back/routes/posts');
 const port = 3065;
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/post', postRouter);
+app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 
 app.listen(port, () => {

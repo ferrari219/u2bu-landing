@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
+import { LOAD_POSTS } from 'actions/_post';
 
 export const initialState = {
+  loadPostsLoading: false, //게시물 불러오기
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false, //이벤트 응모하기
   addPostDone: false,
   addPostError: null,
@@ -19,6 +23,20 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     builder
+      .addCase(LOAD_POSTS.pending, (state) => {
+        state.loadPostsLoading = true;
+        state.loadPostsDone = false;
+        state.loadPostsError = null;
+      })
+      .addCase(LOAD_POSTS.fulfilled, (state, action) => {
+        state.loadPostsLoading = false;
+        state.loadPostsDone = true;
+        state.mainPosts = state.mainPosts.concat(action.payload);
+      })
+      .addCase(LOAD_POSTS.rejected, (state, action) => {
+        state.loadPostsLoading = false;
+        state.loadPostsError = action.payload;
+      })
       .addCase(ADD_POST.pending, (state) => {
         state.addPostLoading = true;
         state.addPostDone = false;
