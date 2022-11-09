@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -29,10 +29,16 @@ const TableList = ({ mainPosts }) => {
       dataIndex: 'address',
       key: 'address',
     },
+    // {
+    //   title: '이미지',
+    //   dataIndex: 'Images',
+    //   key: 'Images',
+    // },
   ];
+
   return (
     <>
-      <Table columns={columns} dataSource={mainPosts} />
+      <Table dataSource={mainPosts} columns={columns} />
     </>
   );
 };

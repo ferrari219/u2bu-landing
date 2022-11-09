@@ -9,7 +9,7 @@ export const LOAD_POSTS = createAsyncThunk(
   'posts',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/posts');
+      const response = await axios.get('/posts?');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

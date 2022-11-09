@@ -13,7 +13,7 @@ const admin = () => {
   //Load Post
   useEffect(() => {
     dispatch(LOAD_POSTS());
-    console.log('mainPosts:', mainPosts[0]);
+    console.log('mainPosts:', mainPosts);
   }, []);
 
   return (
@@ -25,6 +25,7 @@ const admin = () => {
           <div>로그인 후 내용</div>
         </Row>
         <Row>
+          {JSON.stringify(mainPosts)}
           <TableList mainPosts={mainPosts} />
         </Row>
       </>

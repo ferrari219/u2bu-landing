@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
-import { LOAD_POSTS } from 'actions/_post';
+import { ADD_POST, LOAD_POSTS, UPLOAD_IMAGES } from 'actions/post';
 
 export const initialState = {
   loadPostsLoading: false, //게시물 불러오기
