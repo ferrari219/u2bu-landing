@@ -5,6 +5,16 @@ const port = 3065;
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 
+//DB연결
+const db = require('./models');
+const { sync } = require('./models/image');
+db.sequelize
+  .sync()
+  // .sync({ force: true })
+  .then(() => {
+    console.log('DB연결 성공');
+  });
+
 app.use('/post', postRouter);
 app.use('/user', userRouter);
 
