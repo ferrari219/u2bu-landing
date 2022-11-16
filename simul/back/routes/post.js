@@ -1,8 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const { Post, Image } = require('../models');
 
-router.post('/', (req, res, next) => {
-  res.send('/post');
+//Signup
+router.post('/', async (req, res, next) => {
+  try {
+    const post = await Post.create(
+      {
+        applyName: 'applyName',
+        birth: '20000101',
+        phone: '010-0000-0000',
+        address: '서울',
+        content: req.body.content,
+      },
+      {
+        include: Image,
+      }
+    );
+    console.log(post);
+    return res.status(201).json(post);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
 module.exports = router;

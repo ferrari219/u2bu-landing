@@ -7,13 +7,14 @@ const userRouter = require('./routes/user');
 
 //DB연결
 const db = require('./models');
-const { sync } = require('./models/image');
 db.sequelize
-  .sync()
-  // .sync({ force: true })
+  // .sync()
+  .sync({ force: true })
   .then(() => {
     console.log('DB연결 성공');
   });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/post', postRouter);
 app.use('/user', userRouter);
