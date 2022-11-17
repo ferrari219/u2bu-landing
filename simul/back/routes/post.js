@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Post, Image } = require('../models');
 
-//Signup
+//AddPost
 router.post('/', async (req, res, next) => {
   try {
     const post = await Post.create(
