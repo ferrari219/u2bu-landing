@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
 import Head from 'next/head';
+import wrapper from 'store/configureStore';
 
 const common = ({ Component }) => {
   return (
@@ -21,4 +22,4 @@ common.proptype = {
   Component: PropTypes.elementType.isRequired,
 };
 
-export default common;
+export default wrapper.withRedux(common);
