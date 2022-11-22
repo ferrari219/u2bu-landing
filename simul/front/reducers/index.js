@@ -2,7 +2,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { combineReducers } from 'redux';
 import postSlice from 'reducers/post';
 
-const rootreducer = (state, action) => {
+const rootReducer = (state, action) => {
   switch (action.type) {
     case HYDRATE:
       return action.payload;
@@ -14,4 +14,4 @@ const rootreducer = (state, action) => {
     }
   }
 };
-export default rootreducer;
+export default rootReducer;
