@@ -1,22 +1,11 @@
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Form, Input } from 'antd';
+import { useForm, Controller } from 'react-hook-form';
+import { Input } from 'antd';
 
 const signup = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      userid: 'admin',
-      email: 'ferrari219@nate.com',
-      password: '1',
-    },
-  });
+  const { handleSubmit, control } = useForm();
   return (
-    <Form>
+    <div>
       <dl>
         <dt>
           <label htmlFor="userid">아이디</label>
@@ -26,12 +15,12 @@ const signup = () => {
             name="userid"
             control={control}
             render={({ field }) => {
-              <Input />;
+              <Input {...field} />;
             }}
           />
         </dd>
       </dl>
-    </Form>
+    </div>
   );
 };
 
