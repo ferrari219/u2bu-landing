@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input } from 'antd';
 
 const signup = () => {
   const { handleSubmit, control, register } = useForm({
@@ -11,7 +11,7 @@ const signup = () => {
     },
   });
   return (
-    <Form>
+    <Form onFinish={handleSubmit(() => console.log('test'))}>
       <dl>
         <dt>
           <label htmlFor="userid">아이디</label>
@@ -46,6 +46,23 @@ const signup = () => {
           />
         </dd>
       </dl>
+      <div>
+        <Controller
+          name="terms"
+          control={control}
+          render={({ field }) => (
+            <Checkbox checked={field.value} {...register('terms')} {...field}>
+              이용동의
+            </Checkbox>
+          )}
+        />
+      </div>
+      <div>
+        <Button type="primary" htmlType="submit">
+          가입
+        </Button>
+        <Button>취소</Button>
+      </div>
     </Form>
   );
 };
