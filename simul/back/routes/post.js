@@ -7,11 +7,11 @@ router.post('/', async (req, res, next) => {
   try {
     const post = await Post.create(
       {
-        applyName: 'applyName',
-        birth: '20000101',
-        phone: '010-0000-0000',
-        address: '서울',
-        content: req.body.content,
+        applyName: req.body.applyName,
+        // birth: '20000101',
+        // phone: '010-0000-0000',
+        // address: '서울',
+        // content: req.body.content,
       },
       {
         include: Image,

@@ -10,25 +10,25 @@ module.exports = class Post extends Model {
           allowNull: false,
           unique: false,
         },
-        birth: {
-          type: DataTypes.STRING(30),
-          allowNull: false,
-          unique: false,
-        },
-        phone: {
-          type: DataTypes.STRING(30),
-          allowNull: false,
-          unique: true,
-        },
-        address: {
-          type: DataTypes.STRING(100),
-          allowNull: false,
-          unique: false,
-        },
-        content: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-        },
+        // birth: {
+        //   type: DataTypes.STRING(30),
+        //   allowNull: false,
+        //   unique: false,
+        // },
+        // phone: {
+        //   type: DataTypes.STRING(30),
+        //   allowNull: false,
+        //   unique: true,
+        // },
+        // address: {
+        //   type: DataTypes.STRING(100),
+        //   allowNull: false,
+        //   unique: false,
+        // },
+        // content: {
+        //   type: DataTypes.TEXT,
+        //   allowNull: false,
+        // },
       },
       {
         modelName: 'Post',
