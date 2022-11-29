@@ -12,9 +12,19 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     builder
-      .addCase(SIGN_UP.pending, (state) => {})
-      .addCase(SIGN_UP.fulfilled, (state, action) => {})
-      .addCase(SIGN_UP.rejected, (state, action) => {})
+      .addCase(SIGN_UP.pending, (state) => {
+        state.signupLoading = true;
+        state.signupDone = false;
+        state.signupError = null;
+      })
+      .addCase(SIGN_UP.fulfilled, (state, action) => {
+        state.signupLoading = false;
+        state.signupDone = true;
+      })
+      .addCase(SIGN_UP.rejected, (state, action) => {
+        state.signupLoading = false;
+        state.signupError = action.payload;
+      })
       .addDefaultCase((state) => state),
 });
 export default userSlice;
