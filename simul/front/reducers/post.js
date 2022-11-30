@@ -7,6 +7,7 @@ export const initialState = {
   addPostError: null,
 
   mainPosts: [],
+  imagePath: [],
 };
 
 const postSlice = createSlice({
