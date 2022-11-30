@@ -1,9 +1,40 @@
 const express = require('express');
-const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
 const { Post, Image } = require('../models');
+const router = express.Router();
+
+// uploads  폴더 체크
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+// Image
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + '_' + new Date().getTime() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+router.post('/images', upload.array('image'), (req, res, next) => {
+  console.log(req.files);
+  res.json(req.files.map((v) => v.filename));
+});
 
 //AddPost
-router.post('/', async (req, res, next) => {
+router.post('/', upload.none(), async (req, res, next) => {
   try {
     const post = await Post.create(
       {
@@ -14,14 +45,18 @@ router.post('/', async (req, res, next) => {
         // content: req.body.content,
       },
       {
-        include: Image,
+        include: [
+          {
+            model: Image,
+          },
+        ],
       }
     );
     console.log(post);
-    return res.status(201).json(post);
-  } catch (err) {
-    console.error(err);
-    next(err);
+    res.status(201).json(post);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 });
 

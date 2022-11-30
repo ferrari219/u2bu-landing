@@ -23,7 +23,7 @@ const signup = () => {
   });
 
   const onSubmit = useCallback((userid, password, email) => {
-    console.log({ userid, password, email });
+    // console.log({ userid, password, email });
     dispatch(SIGN_UP({ userid, password, email }));
   }, []);
   return (

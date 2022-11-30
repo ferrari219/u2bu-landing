@@ -28,6 +28,10 @@ const upload = multer({
   }),
   limits: { fileSize: 20 * 1024 * 1024 },
 });
+router.post('/images', upload.array('image'), (req, res, next) => {
+  console.log('req.files:', req.files);
+  res.json(req.files.map((v) => v.filename));
+});
 
 //글쓰기
 router.post('/', upload.none(), async (req, res, next) => {
@@ -66,11 +70,6 @@ router.post('/', upload.none(), async (req, res, next) => {
     console.error(error);
     next(error);
   }
-});
-
-router.post('/images', upload.array('image'), (req, res, next) => {
-  console.log('req.files:', req.files);
-  res.json(req.files.map((v) => v.filename));
 });
 
 module.exports = router;
