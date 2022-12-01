@@ -36,8 +36,6 @@ router.post('/images', upload.array('image'), (req, res, next) => {
 //글쓰기
 router.post('/', upload.none(), async (req, res, next) => {
   try {
-    console.log('req.body:', req.body);
-
     const post = await Post.create({
       applyName: req.body.applyName,
       birth: req.body.birth,
