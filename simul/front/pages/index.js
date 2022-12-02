@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -8,8 +8,11 @@ const index = () => {
       applyName: '김철수',
     },
   });
+
+  const onSubmit = useCallback((data) => {}, []);
+
   return (
-    <Form onFinish={handleSubmit(() => console.log('test'))}>
+    <Form onFinish={handleSubmit(() => onSubmit())}>
       <dl>
         <dt>
           <label htmlFor="applyName">아이디</label>
