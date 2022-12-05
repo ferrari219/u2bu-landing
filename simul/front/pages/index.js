@@ -20,6 +20,7 @@ const index = () => {
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+
   const onChangeImages = useCallback((e) => {
     const imageFormData = new FormData();
     [].forEach.call(e.target.files, (f) => {
@@ -28,12 +29,15 @@ const index = () => {
     return dispatch(UPLOAD_IMAGES(imageFormData));
   }, []);
 
+  // 이미지 삭제
   const onRemoveImage = useCallback(
     (index) => () => {
       dispatch(postSlice.actions.REMOVE_IMAGE(index));
     },
     []
   );
+
+  // 게시글 등록
   const onSubmit = useCallback(
     (applyName) => {
       const formData = new FormData();
