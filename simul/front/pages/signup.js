@@ -16,8 +16,8 @@ const signup = () => {
     mode: 'onChange',
     defaultValues: {
       userid: 'admin',
-      password: '2',
-      passwordCheck: '2',
+      password: '1',
+      passwordCheck: '1',
       email: 'ferrari219@nate.com',
     },
   });
