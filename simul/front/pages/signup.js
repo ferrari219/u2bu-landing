@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { SIGN_UP } from 'actions/user';
 
 const signup = () => {
+  const dispatch = useDispatch();
   const {
     control,
     register,
@@ -13,13 +16,23 @@ const signup = () => {
     mode: 'onChange',
     defaultValues: {
       userid: 'admin',
-      password: '1',
-      passwordCheck: '1',
+      password: '2',
+      passwordCheck: '2',
       email: 'ferrari219@nate.com',
     },
   });
+
+  // 회원가입
+  const onSubmit = useCallback((userid, password, email) => {
+    // console.log({ userid });
+    dispatch(SIGN_UP({ userid, password, email }));
+  }, []);
   return (
-    <Form onFinish={handleSubmit()}>
+    <Form
+      onFinish={handleSubmit(({ userid, password, email }) =>
+        onSubmit(userid, password, email)
+      )}
+    >
       <dl>
         <dt>
           <label htmlFor="userid">관리자아이디</label>
@@ -32,7 +45,6 @@ const signup = () => {
               <Input
                 {...register('userid', {
                   required: 'admin을 입력해주세요',
-                  validate,
                 })}
                 {...field}
                 readOnly
@@ -91,10 +103,20 @@ const signup = () => {
           />
           {<span>{errors.passwordCheck?.message}</span>}
         </dd>
+        <dt>
+          <label htmlFor="email">이메일</label>
+        </dt>
+        <dd>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => <Input {...register('email')} {...field} />}
+          />
+        </dd>
       </dl>
       <div>
         <Button type="primary" htmlType="submit">
-          로그인
+          회원가입
         </Button>
       </div>
     </Form>
