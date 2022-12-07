@@ -16,12 +16,12 @@ module.exports = () => {
             where: { userid },
           });
           if (!user) {
-            return done(null, false, { reason: '존재하지 않는 사용자입니다.' });
+            return done(null, false, {
+              reason: '존재하지 않는 아이디입니다. 회원가입을 진행해주세요.',
+            });
           }
           const result = await bcrypt.compare(password, user.password);
-          if (result) {
-            return done(null, user);
-          }
+          if (result) return done(null, user);
           return done(null, false, { reason: '비밀번호가 틀렸습니다.' });
         } catch (error) {
           console.error(error);
