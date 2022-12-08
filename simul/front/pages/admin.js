@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { LOG_IN } from 'actions/user';
 
 const login = () => {
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -16,7 +19,8 @@ const login = () => {
   });
 
   const onLogin = useCallback((userid, password) => {
-    console.log({ userid, password });
+    // console.log({ userid, password });
+    dispatch(LOG_IN({ userid, password }));
   }, []);
 
   return (
