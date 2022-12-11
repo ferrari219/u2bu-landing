@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react';
-import AdminLayout from 'components/01_u2bu/admin/AdminLayout';
 import { Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import TableList from 'components/01_u2bu/admin/TableList';
 import { LOAD_POSTS } from 'actions/post';
+
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+import theme from 'assets/styles/theme';
+
+import AdminLayout from 'components/01_u2bu/admin/AdminLayout';
+import TableList from 'components/01_u2bu/admin/TableList';
 import useMobile from 'hook/useIsMobile';
 
 const admin = () => {
