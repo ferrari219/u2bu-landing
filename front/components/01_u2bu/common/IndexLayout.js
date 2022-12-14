@@ -1,10 +1,11 @@
 import React from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import PropTypes from 'prop-types';
 
 import useMobile from 'hook/useIsMobile';
 
-const IndexLayout = ({ children, paddingOn = false }) => {
+const IndexLayout = ({ children, paddingOn = false, bgColor = '' }) => {
   const isMobile = useMobile();
   const markUp = (
     <section>
@@ -12,16 +13,24 @@ const IndexLayout = ({ children, paddingOn = false }) => {
     </section>
   );
   return (
-    <>{isMobile ? <div css={moStyle}>{markUp}</div> : <div>{markUp}</div>}</>
+    <>
+      {isMobile ? (
+        <div css={moStyle(paddingOn, bgColor)}>{markUp}</div>
+      ) : (
+        <div>{markUp}</div>
+      )}
+    </>
   );
 };
-const moStyle = css`
-  .paddingOn {
-    padding: 0 2rem;
-  }
+IndexLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+  paddingOn: PropTypes.bool,
+  bgColor: PropTypes.string,
+};
+const moStyle = (paddingOn, bgColor) => css`
   & > section {
-    background-color: black;
-    padding: 0;
+    background-color: ${bgColor ? bgColor : 'white'};
+    padding: ${paddingOn ? '0 2rem' : '0'};
   }
 `;
 

@@ -65,7 +65,7 @@ const PostForm = () => {
     [imagePaths]
   );
   const markUp = (
-    <IndexLayout>
+    <IndexLayout paddingOn>
       <Form
         onFinish={handleSubmit(
           ({ applyName, birth, phone, address, content, image }) =>
