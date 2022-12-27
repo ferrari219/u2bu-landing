@@ -13,6 +13,7 @@ module.exports = class Post extends Model {
       {
         charset: 'utf8',
         collate: 'utf8_general_ci',
+        sequelize,
       }
     );
   }

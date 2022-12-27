@@ -15,9 +15,7 @@ const sequelize = new Sequelize(
 db.Post = post;
 
 Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+  db[modelName].init(sequelize);
 });
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

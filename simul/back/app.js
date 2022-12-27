@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+const cors = require('cors');
 const postRouter = require('./routers/post');
 
 const port = 3065;
@@ -16,6 +17,15 @@ db.sequelize
     console.log('DB연결 성공');
   })
   .catch(console.error);
+//cors
+app.use(
+  cors({
+    origin: 'http://localhost:3060',
+    credentials: false,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // 라우터
 app.use('/post', postRouter);

@@ -1,13 +1,13 @@
 const express = require('express');
-const Post = require('../models/post');
+const { Post } = require('../models');
 const router = express.Router();
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
-    const post = Post.create({
+    const post = await Post.create({
       applyName: req.body.applyName,
     });
-    res.status(200).json(post);
+    return res.status(200).json(post);
   } catch (error) {
     console.error(error);
     next(error);
