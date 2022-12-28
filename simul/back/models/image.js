@@ -1,23 +1,23 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
 
-module.exports = class Post extends Model {
+module.exports = class Image extends Model {
   static init(sequelize) {
     return super.init(
       {
-        applyName: {
-          type: DataTypes.STRING(20),
+        src: {
+          type: DataTypes.STRING(200),
           allowNull: false,
         },
       },
       {
-        charset: 'utf8',
-        collate: 'utf8_general_ci',
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_general_ci',
         sequelize,
       }
     );
   }
   static associate(db) {
-    db.Post.hasMany(db.Image);
+    db.Image.belongsTo(db.Post);
   }
 };
