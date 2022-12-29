@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post } = require('../models');
+const { Post, Image } = require('../models');
 const router = express.Router();
 
 // 폴더 체크
@@ -32,12 +32,32 @@ router.post('/images', upload.array('image'), (req, res, next) => {
   res.json(req.files.map((v) => v.filename));
 });
 
-router.post('/', async (req, res, next) => {
+// 글쓰기
+router.post('/', upload.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
       applyName: req.body.applyName,
     });
-    return res.status(200).json(post);
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      } else {
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: Image,
+        },
+      ],
+    });
+    res.status(201).json(fullPost);
   } catch (error) {
     console.error(error);
     next(error);

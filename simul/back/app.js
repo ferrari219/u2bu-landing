@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
+const morgan = require('morgan');
+
 const postRouter = require('./routers/post');
 
 const port = 3065;
@@ -24,6 +27,9 @@ app.use(
     credentials: false,
   })
 );
+//multipart/form-data
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+//formData
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
