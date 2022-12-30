@@ -9,6 +9,7 @@ const postRouter = require('./routers/post');
 
 const port = 3065;
 
+app.use(morgan('dev'));
 dotenv.config();
 
 // DB연결

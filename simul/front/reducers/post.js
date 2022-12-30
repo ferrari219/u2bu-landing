@@ -1,0 +1,34 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { ADD_POST } from 'actions/post';
+
+export const initialState = {
+  addPostLoading: false, // 글쓰기
+  addPostDone: false,
+  addPostError: null,
+
+  mainPosts: [],
+};
+
+const postSlice = createSlice({
+  name: 'post',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) =>
+    builder
+      .addCase(ADD_POST.pending, (state) => {
+        state.addPostLoading = true;
+        state.addPostDone = false;
+        state.addPostError = null;
+      })
+      .addCase(ADD_POST.fulfilled, (state) => {
+        state.addPostLoading = false;
+        state.addPostDone = true;
+        state.mainPosts.unshift(action.data);
+      })
+      .addCase(ADD_POST.rejected, (state) => {
+        state.addPostLoading = false;
+        state.addPostError = action.error;
+      })
+      .addDefaultCase((state) => state),
+});
+export default postSlice;
