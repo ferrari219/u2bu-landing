@@ -2,8 +2,9 @@ import React, { useCallback, useRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import { backURL } from 'config/config';
-import { UPLOAD_IMAGES } from 'actions/post';
+import { ADD_POST, UPLOAD_IMAGES } from 'actions/post';
 import { useDispatch, useSelector } from 'react-redux';
+import postSlice from 'reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,23 @@ const PostForm = () => {
     });
     return dispatch(UPLOAD_IMAGES(imageFormData));
   }, []);
-  const onRemoveImage = useCallback(() => {}, []);
-  const onSubmit = useCallback(() => {}, []);
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch(postSlice.actions.REMOVE_IMAGES(index));
+    },
+    []
+  );
+  const onSubmit = useCallback(
+    (applyName) => {
+      const formData = new FormData();
+      imagePaths.forEach((f) => {
+        formData.append('image', f);
+      });
+      formData.append('applyName', applyName);
+      return dispatch(ADD_POST(formData));
+    },
+    [imagePaths]
+  );
   return (
     <Form onFinish={handleSubmit(({ applyName }) => onSubmit(applyName))}>
       <div>

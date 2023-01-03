@@ -16,7 +16,13 @@ export const initialState = {
 const postSlice = createSlice({
   name: 'post',
   initialState,
-  reducers: {},
+  reducers: {
+    REMOVE_IMAGES(state, action) {
+      state.imagePaths = state.imagePaths.filter(
+        (v, i) => i !== action.payload
+      );
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(ADD_POST.pending, (state) => {
@@ -24,10 +30,10 @@ const postSlice = createSlice({
         state.addPostDone = false;
         state.addPostError = null;
       })
-      .addCase(ADD_POST.fulfilled, (state) => {
+      .addCase(ADD_POST.fulfilled, (state, action) => {
         state.addPostLoading = false;
         state.addPostDone = true;
-        state.mainPosts.unshift(action.data);
+        state.mainPosts.unshift(action.payload);
       })
       .addCase(ADD_POST.rejected, (state) => {
         state.addPostLoading = false;
@@ -38,12 +44,12 @@ const postSlice = createSlice({
         state.uploadImagesDone = false;
         state.uploadImagesError = null;
       })
-      .addCase(UPLOAD_IMAGES.fulfilled, (state) => {
+      .addCase(UPLOAD_IMAGES.fulfilled, (state, action) => {
         state.uploadImagesLoading = false;
         state.uploadImagesDone = true;
         state.imagePaths = action.payload;
       })
-      .addCase(UPLOAD_IMAGES.rejected, (state) => {
+      .addCase(UPLOAD_IMAGES.rejected, (state, action) => {
         state.uploadImagesLoading = false;
         state.uploadImagesError = action.payload;
       })
