@@ -1,11 +1,35 @@
-import React from 'react';
-import { Form, Input } from 'antd';
+import React, { useCallback, useRef } from 'react';
+import { Button, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
+import { backURL } from 'config/config';
+import { UPLOAD_IMAGES } from 'actions/post';
+import { useDispatch, useSelector } from 'react-redux';
 
 const PostForm = () => {
-  const { handleSubmit, control } = useForm();
+  const dispatch = useDispatch();
+  const { imagePaths } = useSelector((state) => state.post);
+  const { handleSubmit, control } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      applyName: '김철수',
+    },
+  });
+  //upload image
+  const imageInput = useRef();
+  const onClickImageUpload = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
+  const onChangeImages = useCallback((e) => {
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+    return dispatch(UPLOAD_IMAGES(imageFormData));
+  }, []);
+  const onRemoveImage = useCallback(() => {}, []);
+  const onSubmit = useCallback(() => {}, []);
   return (
-    <Form>
+    <Form onFinish={handleSubmit(({ applyName }) => onSubmit(applyName))}>
       <div>
         <dl>
           <dt>
@@ -20,7 +44,30 @@ const PostForm = () => {
           </dd>
         </dl>
         <div>
-          <input type="file" name="image" ref={iamgeInput} />
+          <input
+            type="file"
+            name="image"
+            ref={imageInput}
+            onChange={onChangeImages}
+            multiple
+            hidden
+          />
+          <Button onClick={onClickImageUpload}>업로드</Button>
+        </div>
+        <div>
+          {imagePaths.map((v, i) => (
+            <div key={v}>
+              <img src={`${backURL}/${v}`} alt={v} />
+              <div>
+                <Button onClick={onRemoveImage(i)}>제거</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <Button type="primary" htmlType="submit">
+            응모하기
+          </Button>
         </div>
       </div>
     </Form>
