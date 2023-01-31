@@ -9,4 +9,26 @@ export const initialState = {
   mainPosts: [],
 };
 
-const postSlice = createSlice({ name: 'post', initialState, reducers: {} });
+const postSlice = createSlice({
+  name: 'post',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) =>
+    builder
+      .addCase(ADD_POST.pending, (state) => {
+        state.addPostLoading = true;
+        state.addPostDone = false;
+        state.addPostError = null;
+      })
+      .addCase(ADD_POST.fulfilled, (state, action) => {
+        state.addPostLoading = false;
+        state.addPostDone = true;
+        state.mainPosts.unshift(action.data);
+      })
+      .addCase(ADD_POST.rejected, (state, action) => {
+        state.addPostLoading = false;
+        state.addPostError = action.data;
+      })
+      .addDefaultCase((state) => state),
+});
+export default postSlice;
