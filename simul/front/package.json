@@ -4,19 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next -p 3000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
-    "axios": "^1.2.6",
+    "antd": "^5.4.6",
+    "axios": "^1.4.0",
     "next": "^13.1.6",
+    "next-redux-wrapper": "^8.1.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "redux-logger": "^3.0.6",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
@@ -28,6 +30,7 @@
     "@types/react-dom": "^18.0.10",
     "@types/react-redux": "^7.1.25",
     "@types/redux": "^3.6.0",
-    "@types/redux-logger": "^3.0.9"
+    "@types/redux-logger": "^3.0.9",
+    "redux-logger": "^3.0.6"
   }
 }
