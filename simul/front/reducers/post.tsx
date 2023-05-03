@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ADD_POST } from 'actions/post';
 
 export const initialState = {
   addPostLoading: false, // 이벤트 응모하기
@@ -21,3 +22,4 @@ const postSlice = createSlice({
       })
       .addDefaultCase((state) => state),
 });
+export default postSlice;

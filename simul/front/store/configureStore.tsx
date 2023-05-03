@@ -5,9 +5,8 @@ import reducer from 'reducers';
 
 const isDev = process.env.NODE_ENV === 'development';
 const createStore = () => {
-  const middleware = (getDefaultMiddleware) => {
+  const middleware = (getDefaultMiddleware) =>
     isDev ? getDefaultMiddleware().concat(logger) : getDefaultMiddleware();
-  };
   const store = configureStore({
     reducer,
     middleware,
