@@ -1,8 +1,21 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import UseInput from 'hook/UseInput';
 import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const PostForm = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      applyName: '김철수',
+      birth: '19990101',
+    },
+  });
+
   const [applyName, onChangeApplyName, setApplyName] = UseInput('');
   const [birth, onChangeBirth, setbirth] = UseInput('');
 
