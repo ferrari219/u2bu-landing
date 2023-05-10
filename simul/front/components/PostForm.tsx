@@ -1,12 +1,13 @@
 import { Button, Checkbox, Form, Input } from 'antd';
-import UseInput from 'hook/UseInput';
-import { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 const PostForm = () => {
   const {
     handleSubmit,
     register,
+    getValues,
+    control,
     formState: { errors },
   } = useForm({
     mode: 'onChange',
@@ -16,54 +17,55 @@ const PostForm = () => {
     },
   });
 
-  const [applyName, onChangeApplyName, setApplyName] = UseInput('');
-  const [birth, onChangeBirth, setbirth] = UseInput('');
-
-  const [terms, setTerms] = useState(false);
-  const [termsError, setTermsError] = useState(false);
-  const onChangeTerms = useCallback(
-    (e) => {
-      setTermsError(false);
-      setTerms(e.target.checked);
-      // console.log(e.target.checked);
-    },
-    [terms]
-  );
-
-  const onSubmit = useCallback(() => {
-    if (!terms) {
-      return;
-    }
+  const onSubmit = useCallback((applyName, birth) => {
     console.log(applyName, birth);
-    // setApplyName('');
-  }, [applyName, birth, terms]);
+  }, []);
   return (
     <>
-      <Form onFinish={onSubmit}>
-        <div>
-          <label htmlFor="applyName">이름</label>
-          <Input
-            name="applyName"
-            value={applyName}
-            onChange={onChangeApplyName}
-            placeholder="이름"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="birth">생년월일</label>
-          <Input
-            name="birth"
-            value={birth}
-            onChange={onChangeBirth}
-            placeholder="YYYYMMDD"
-          />
-        </div>
-        <div>
+      <Form
+        onFinish={handleSubmit(({ applyName, birth }) =>
+          onSubmit(applyName, birth)
+        )}
+      >
+        <dl>
+          <dt>
+            <label htmlFor="applyName">이름</label>
+          </dt>
+          <dd>
+            <Controller
+              name="applyName"
+              placeholder="이름"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...register('applyName', {
+                    required: '필수입력입니다.',
+                  })}
+                  {...field}
+                />
+              )}
+            />
+          </dd>
+          <dt>
+            <label htmlFor="birth">생년월일</label>
+          </dt>
+          <dd>
+            <Controller
+              name="birth"
+              placeholder="YYYYMMDD"
+              control={control}
+              render={({ field }) => (
+                <Input {...register('birth')} {...field} />
+              )}
+            />
+          </dd>
+        </dl>
+
+        {/* <div>
           <Checkbox name="terms" checked={terms} onChange={onChangeTerms}>
             개인정보 수집 동의(필수)
           </Checkbox>
-        </div>
+        </div> */}
         <div>
           <Button type="primary" htmlType="submit">
             응모하기
