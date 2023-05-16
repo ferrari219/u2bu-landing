@@ -63,21 +63,6 @@ const PostForm = () => {
                 />
               )}
             />
-            {/* <Controller
-              name="birth"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...register('birth', {
-                    required: '형식에 맞게 YYYYMMDD로 입력해주세요.',
-                    minLength: 8,
-                    maxLength: 8,
-                  })}
-                  {...field}
-                  placeholder="YYYYMMDD"
-                />
-              )}
-            /> */}
             {errors.birth && errors.birth.message}
           </dd>
         </dl>
