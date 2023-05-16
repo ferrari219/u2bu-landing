@@ -1,5 +1,4 @@
 import { Button, Checkbox, Form, Input } from 'antd';
-import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 const PostForm = () => {
@@ -12,21 +11,18 @@ const PostForm = () => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
+      // applyName: '',
       applyName: '김철수',
-      birth: '19990101',
+      birth: '',
+      // birth: '19990101',
     },
   });
 
-  const onSubmit = useCallback((applyName, birth) => {
-    console.log(applyName, birth);
-  }, []);
+  console.log(errors);
+
   return (
     <>
-      <Form
-        onFinish={handleSubmit(({ applyName, birth }) =>
-          onSubmit(applyName, birth)
-        )}
-      >
+      <Form onFinish={handleSubmit((data) => console.log(data))}>
         <dl>
           <dt>
             <label htmlFor="applyName">이름</label>
@@ -34,17 +30,18 @@ const PostForm = () => {
           <dd>
             <Controller
               name="applyName"
-              placeholder="이름"
               control={control}
               render={({ field }) => (
                 <Input
                   {...register('applyName', {
-                    required: '필수입력입니다.',
+                    required: '필수 입력사항입니다.',
                   })}
                   {...field}
+                  placeholder="이름"
                 />
               )}
             />
+            {errors.applyName && errors.applyName.message}
           </dd>
           <dt>
             <label htmlFor="birth">생년월일</label>
@@ -52,12 +49,36 @@ const PostForm = () => {
           <dd>
             <Controller
               name="birth"
-              placeholder="YYYYMMDD"
               control={control}
               render={({ field }) => (
-                <Input {...register('birth')} {...field} />
+                <Input
+                  {...register('birth', {
+                    pattern: {
+                      value: /^[0-9]*$/,
+                      message: '형식에 맞게 숫자만 입력해주세요.',
+                    },
+                  })}
+                  {...field}
+                  placeholder="YYYYMMDD"
+                />
               )}
             />
+            {/* <Controller
+              name="birth"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...register('birth', {
+                    required: '형식에 맞게 YYYYMMDD로 입력해주세요.',
+                    minLength: 8,
+                    maxLength: 8,
+                  })}
+                  {...field}
+                  placeholder="YYYYMMDD"
+                />
+              )}
+            /> */}
+            {errors.birth && errors.birth.message}
           </dd>
         </dl>
 
