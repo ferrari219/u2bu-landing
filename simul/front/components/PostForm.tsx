@@ -1,7 +1,11 @@
 import { Button, Checkbox, Form, Input } from 'antd';
+import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { ADD_POST } from 'actions/post';
 
 const PostForm = () => {
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     register,
@@ -13,16 +17,20 @@ const PostForm = () => {
     defaultValues: {
       // applyName: '',
       applyName: '김철수',
-      birth: '',
-      // birth: '19990101',
+      // birth: '',
+      birth: '19990101',
     },
   });
 
-  console.log(errors);
+  // console.log(errors);
 
+  const onSubmit = useCallback((data) => {
+    // console.log(data);
+    dispatch(ADD_POST(data));
+  }, []);
   return (
     <>
-      <Form onFinish={handleSubmit((data) => console.log(data))}>
+      <Form onFinish={handleSubmit((data) => onSubmit(data))}>
         <dl>
           <dt>
             <label htmlFor="applyName">이름</label>
