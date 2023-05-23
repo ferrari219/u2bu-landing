@@ -15,8 +15,11 @@ dotenv.config();
 
 const app = express();
 const prod: boolean = process.env.NODE_ENV === 'production';
-const port = prod ? process.env.PORT : 3065;
 
+const port = prod ? process.env.PORT : 3065;
+app.set('port', port);
+
+//미들웨어 영역
 if (prod) {
   app.use(hpp());
   app.use(helmet());
@@ -48,7 +51,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // https -> true
-      domain: prod ? '.grah.shop' : undefined,
+      domain: prod ? '.grah.shop' : undefined, //prod && '.grah.shop' 해도 동작은 하지만 왼쪽 코드 추천
     },
   })
 );
