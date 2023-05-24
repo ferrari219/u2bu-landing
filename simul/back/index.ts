@@ -11,6 +11,8 @@ import helmet from 'helmet';
 // import { Request, Response, NextFunction } from 'express'; //생략가능
 // import postRouter from './routes/post';
 
+import { sequelize } from './models';
+
 dotenv.config();
 
 const app = express();
@@ -18,6 +20,14 @@ const prod: boolean = process.env.NODE_ENV === 'production';
 
 const port = prod ? process.env.PORT : 3065;
 app.set('port', port);
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log('db 연결 성공');
+  })
+  .catch((err: Error) => {
+    console.error(err);
+  });
 
 //미들웨어 영역
 if (prod) {
@@ -53,6 +63,7 @@ app.use(
       secure: false, // https -> true
       domain: prod ? '.grah.shop' : undefined, //prod && '.grah.shop' 해도 동작은 하지만 왼쪽 코드 추천
     },
+    name: 'rnbck', //connect.sid 대신 사용할 이름
   })
 );
 
