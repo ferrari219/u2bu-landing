@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
@@ -15,6 +16,16 @@ db.sequelize
     console.log('db 연결 성공');
   })
   .catch(console.error);
+
+//미들웨어
+app.use(
+  cors({
+    origin: 'http://localhost:3060',
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.send(`${port} is running`);
