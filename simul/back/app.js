@@ -7,6 +7,15 @@ const userRouter = require('./routes/user');
 const prod = process.env.NODE_ENV === 'production';
 const port = prod ? process.env.PORT : 3065;
 
+//DB연결
+const db = require('./models');
+db.sequelize
+  .sync({ force: true }) // {force: true}
+  .then(() => {
+    console.log('db 연결 성공');
+  })
+  .catch(console.error);
+
 app.get('/', (req, res) => {
   res.send(`${port} is running`);
 });
