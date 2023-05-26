@@ -11,7 +11,8 @@ const port = prod ? process.env.PORT : 3065;
 //DB연결
 const db = require('./models');
 db.sequelize
-  .sync({ force: true }) // {force: true}
+  .sync({ force: true })
+  // .sync()
   .then(() => {
     console.log('db 연결 성공');
   })
